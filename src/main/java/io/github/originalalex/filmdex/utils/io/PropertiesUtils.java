@@ -9,7 +9,6 @@ public class PropertiesUtils {
 
     public static Properties getProperties(String relativePath) {
         try {
-            System.out.println(relativePath);
             InputStream inputStream = PropertiesUtils.class.getResourceAsStream(relativePath);
             Properties props = new Properties();
             props.load(inputStream);

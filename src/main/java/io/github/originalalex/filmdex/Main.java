@@ -1,6 +1,9 @@
 package io.github.originalalex.filmdex;
 
 import io.github.originalalex.filmdex.tmdb.data.API_INFORMATION;
+import io.github.originalalex.filmdex.tmdb.movies.MoviesSearch;
+import io.github.originalalex.filmdex.tmdb.movies.SearchSpecificMovie;
+import io.github.originalalex.filmdex.utils.io.HttpUtils;
 import io.github.originalalex.filmdex.utils.io.PropertiesUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,7 +23,7 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        //initializeDefaults();
+        initializeDefaults();
         initializeServer();
     }
 

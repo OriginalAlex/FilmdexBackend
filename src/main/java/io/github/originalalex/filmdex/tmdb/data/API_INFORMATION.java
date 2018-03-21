@@ -7,9 +7,9 @@ public class API_INFORMATION {
      */
 
     private static String API_KEY;
-    private static final String BASE_URL = "https://api.themoviedb.org/3/";
+    private static final String BASE_URL = "https://api.themoviedb.org/3";
 
-    public static void setKey(String key) {
+    public static void setKey(String key) { // We can assume this will be called before the key needs to be accessed.
         API_KEY = key;
     }
 

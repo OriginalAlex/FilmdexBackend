@@ -1,12 +1,13 @@
 package io.github.originalalex.filmdex.server;
 
+import io.github.originalalex.filmdex.tmdb.movies.MoviesSearch;
+import io.github.originalalex.filmdex.tmdb.movies.SearchSpecificMovie;
+import io.github.originalalex.filmdex.tmdb.tv.SearchSpecificShow;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
+@CrossOrigin
 public class API {
 
     /**
@@ -23,19 +24,19 @@ public class API {
     @RequestMapping(value = "/basicInfo", method = RequestMethod.GET)
     @ResponseBody
     public String getBasicInformation() {
-        return null;
+        return MoviesSearch.getHomepageInformation();
     }
 
-    @RequestMapping(value = "/films/:id", method = RequestMethod.GET)
+    @RequestMapping(value = "/films/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public String getSpecificFilm() {
-        return null;
+    public String getSpecificFilm(@PathVariable String id) {
+        return SearchSpecificMovie.getSpecificFilm(id);
     }
 
-    @RequestMapping(value = "/shows/:id", method = RequestMethod.GET)
+    @RequestMapping(value = "/shows/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public String getSpecificShow() {
-        return null;
+    public String getSpecificShow(@PathVariable String id) {
+        return SearchSpecificShow.getSpecificShow(id);
     }
 
 }
