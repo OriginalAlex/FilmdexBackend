@@ -4,7 +4,6 @@ import io.github.originalalex.filmdex.tmdb.misc.GeneralSearch;
 import io.github.originalalex.filmdex.tmdb.movies.MoviesSearch;
 import io.github.originalalex.filmdex.tmdb.movies.SearchSpecificMovie;
 import io.github.originalalex.filmdex.tmdb.tv.SearchSpecificShow;
-import org.omg.CORBA.Request;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 

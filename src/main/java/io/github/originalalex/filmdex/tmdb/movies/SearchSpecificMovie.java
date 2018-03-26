@@ -4,7 +4,6 @@ import io.github.originalalex.filmdex.datastructures.cache.Cache;
 import io.github.originalalex.filmdex.datastructures.cache.SimpleCache;
 import io.github.originalalex.filmdex.tmdb.data.API_INFORMATION;
 import io.github.originalalex.filmdex.utils.api.APIUtils;
-import io.github.originalalex.filmdex.utils.io.HttpUtils;
 
 public class SearchSpecificMovie {
 
@@ -13,7 +12,7 @@ public class SearchSpecificMovie {
     private static final String BASE_URL = API_INFORMATION.getBaseURL() + "/movie/";
 
     public static String getSpecificFilm(String query) {
-        return APIUtils.fetchDataAndAddToCache(cache, (BASE_URL + query), query, "credits", "videos");
+        return APIUtils.fetchDataAndAddToCache(cache, (BASE_URL + query), query, "credits", "videos", "reviews", "similar");
     }
 
 }

@@ -14,7 +14,8 @@ public class HttpUtils {
                 .url(url)
                 .build();
         try {
-            return client.newCall(request).execute().body().string();
+            String result = client.newCall(request).execute().body().string();
+            return result;
         } catch (IOException e) {
             e.printStackTrace();
             return null;
