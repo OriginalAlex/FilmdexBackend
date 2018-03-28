@@ -3,7 +3,6 @@ package io.github.originalalex.filmdex;
 import io.github.originalalex.filmdex.database.DatabaseModifier;
 import io.github.originalalex.filmdex.tmdb.data.API_INFORMATION;
 import io.github.originalalex.filmdex.utils.io.PropertiesUtils;
-import io.github.originalalex.filmdex.utils.io.WarmUp;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

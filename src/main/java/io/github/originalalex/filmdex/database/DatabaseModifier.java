@@ -1,5 +1,7 @@
 package io.github.originalalex.filmdex.database;
 
+import io.github.originalalex.filmdex.server.AccountsAPI;
+
 import java.sql.*;
 import java.util.Calendar;
 
@@ -20,9 +22,15 @@ public class DatabaseModifier {
             AddDefaults.addDefaults(connection, dbName);
             this.databaseConnection = connection;
             this.setNextIDs();
+            this.setUpDatabaseFetcher();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private void setUpDatabaseFetcher() {
+        DatabaseFetcher dbFetcher = new DatabaseFetcher(this.databaseConnection);
+        AccountsAPI.setDbFetcher(dbFetcher);
     }
 
     private void setNextIDs() {
@@ -69,7 +77,18 @@ public class DatabaseModifier {
             addPost.setString(6, content);
             addPost.executeUpdate();
             addPost.close();
-            nextPostID++;
+            this.nextPostID++;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deletePost(int postId) {
+        try {
+            PreparedStatement deletePost = databaseConnection.prepareStatement("DELETE FROM posts WHERE id=?;");
+            deletePost.setInt(1, postId);
+            deletePost.executeUpdate();
+            deletePost.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -113,6 +132,14 @@ public class DatabaseModifier {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public ResultSet getPosts() {
+        return null;
+    }
+
+    public ResultSet getUsernames(int... ids) {
+        return null;
     }
 
 }

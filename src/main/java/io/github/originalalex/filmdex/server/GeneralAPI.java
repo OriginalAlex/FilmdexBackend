@@ -9,18 +9,11 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @CrossOrigin
-public class API {
+public class GeneralAPI {
 
     /**
      * Contains the endpoints for the non-user based parts of the site (i.e. completely seperate from user operations)
      */
-
-
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
-    @ResponseBody
-    public String helloWorld() {
-        return "hi";
-    }
 
     @RequestMapping(value = "/basicInfo", method = RequestMethod.GET)
     @ResponseBody
