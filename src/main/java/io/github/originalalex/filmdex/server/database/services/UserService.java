@@ -17,6 +17,17 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    public boolean areCredentialsValid(String username, String passwordHash) {
+        Iterator<User> users = userRepository.findAll().iterator();
+        while (users.hasNext()) {
+            User user = users.next();
+            if (user.getUsername().equals(username)) { // found the account they're trying to sign into
+                return user.getPasswordHash().equals(passwordHash);
+            }
+        }
+        return false; // no point distinguishing between invalid username and invalid password for security reasons
+    }
+
     private boolean emailExists(String email) {
         Iterator<User> users = userRepository.findAll().iterator();
         while (users.hasNext()) {
