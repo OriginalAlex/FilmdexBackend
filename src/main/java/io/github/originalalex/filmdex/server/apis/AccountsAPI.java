@@ -1,10 +1,12 @@
 package io.github.originalalex.filmdex.server.apis;
 
+import io.github.originalalex.filmdex.server.database.models.User;
 import io.github.originalalex.filmdex.server.database.services.PostService;
 import io.github.originalalex.filmdex.server.database.services.UserService;
 import io.github.originalalex.filmdex.exceptions.EmailsExistsException;
 import io.github.originalalex.filmdex.server.dto.SignIn;
 import io.github.originalalex.filmdex.server.dto.UserDto;
+import io.github.originalalex.filmdex.utils.api.TokenUtils;
 import io.github.originalalex.filmdex.utils.io.HashUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,7 +14,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.concurrent.TimeUnit;
 
 @Controller
 @RequestMapping("/users")
@@ -36,14 +41,28 @@ public class AccountsAPI {
     }
 
     @RequestMapping(value = "/signIn", method = RequestMethod.POST)
-    public @ResponseBody String signIn(@RequestBody @Valid SignIn details) {
+    public @ResponseBody String signIn(@RequestBody @Valid SignIn details, HttpServletResponse response) {
         String username = details.getUsername();
         String password = details.getPassword();
         String passwordHash = HashUtils.SHA256(password);
-        if (userService.areCredentialsValid(username, passwordHash)) {
-            return "correct!";
+        User user = userService.areCredentialsValid(username, passwordHash);
+        if (user != null) {
+            Cookie cookie = new Cookie("Token", TokenUtils.issueUserToken(user.getId(), "USER"));
+            cookie.setHttpOnly(true);
+            cookie.setMaxAge((int) TimeUnit.DAYS.toMillis(1));
+            response.addCookie(cookie);
+            return "success";
         }
-        return "wrong!";
+        return "failure";
+    }
+
+    @RequestMapping(value = "/signOut", method = RequestMethod.POST)
+    public @ResponseBody String signOut(HttpServletResponse response) {
+        Cookie cookie = new Cookie("Token", null);
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return "signed out";
     }
 
     @RequestMapping(
