@@ -20,7 +20,7 @@ public class Post {
     private String body;
     private Date timePosted;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="raterId")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="post")
     private List<Rating> ratings;
 
     public Long getId() {
@@ -70,6 +70,5 @@ public class Post {
     public void setTimePosted(Date timePosted) {
         this.timePosted = timePosted;
     }
-
 
 }
