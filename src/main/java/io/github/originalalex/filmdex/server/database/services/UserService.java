@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 @Service
 public class UserService {
@@ -26,6 +27,14 @@ public class UserService {
             }
         }
         return null; // no point distinguishing between invalid username and invalid password for security reasons
+    }
+
+    public User fetchById(long id) {
+        try {
+            return userRepository.findById(id).get();
+        } catch (NoSuchElementException e) {
+            return null;
+        }
     }
 
     private boolean emailExists(String email) {

@@ -1,10 +1,9 @@
 package io.github.originalalex.filmdex.server.dto;
 
-import io.github.originalalex.filmdex.server.annotations.ValidEmail;
-import io.github.originalalex.filmdex.server.annotations.ValidPassword;
-import io.github.originalalex.filmdex.server.annotations.ValidUsername;
+import io.github.originalalex.filmdex.server.dto.annotations.ValidEmail;
+import io.github.originalalex.filmdex.server.dto.annotations.ValidPassword;
+import io.github.originalalex.filmdex.server.dto.annotations.ValidUsername;
 
-import javax.persistence.Entity;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 

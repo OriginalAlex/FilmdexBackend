@@ -1,13 +1,16 @@
 package io.github.originalalex.filmdex.server.apis;
 
+import io.github.originalalex.filmdex.server.database.models.Post;
 import io.github.originalalex.filmdex.server.database.models.User;
 import io.github.originalalex.filmdex.server.database.services.PostService;
 import io.github.originalalex.filmdex.server.database.services.UserService;
 import io.github.originalalex.filmdex.exceptions.EmailsExistsException;
+import io.github.originalalex.filmdex.server.dto.PostDto;
 import io.github.originalalex.filmdex.server.dto.SignIn;
 import io.github.originalalex.filmdex.server.dto.UserDto;
 import io.github.originalalex.filmdex.utils.api.TokenUtils;
 import io.github.originalalex.filmdex.utils.io.HashUtils;
+import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Controller
@@ -63,6 +67,27 @@ public class AccountsAPI {
         cookie.setMaxAge(0);
         response.addCookie(cookie);
         return "signed out";
+    }
+
+    @RequestMapping(value = "/submitPost", method = RequestMethod.POST)
+    public @ResponseBody String post(@RequestBody @Valid PostDto postDto) {
+        if (postDto.getPosterId() == null) return "no poster id present";
+        User poster = userService.fetchById(postDto.getPosterId());
+        if (poster == null) return "invalid poster id";
+        Post post = postService.createPost(poster, postDto.getThread(), (postDto.getReplyingTo() == null) ? -1 : postDto.getReplyingTo(), postDto.getBody());
+        if (post != null) {
+            return "created";
+        }
+        return "failed";
+    }
+
+    @RequestMapping(value = "/fetchPostsByThread", method = RequestMethod.GET)
+    public @ResponseBody List<Post> fetchPostsByThread(@RequestParam("thread") String thread) {
+        List<Post> posts = postService.getPostsByThread(thread);
+        for (Post post : posts) {
+            System.out.println(post.getBody());
+        }
+        return posts;
     }
 
     @RequestMapping(

@@ -1,6 +1,6 @@
 package io.github.originalalex.filmdex.server.dto.validators;
 
-import io.github.originalalex.filmdex.server.annotations.ValidUsername;
+import io.github.originalalex.filmdex.server.dto.annotations.ValidUsername;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

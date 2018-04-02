@@ -1,5 +1,7 @@
 package io.github.originalalex.filmdex.server.database.models;
 
+import com.fasterxml.jackson.annotation.*;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -12,10 +14,17 @@ public class User {
     private Long id;
 
     private String username;
+
+    @JsonIgnore
     private String passwordHash;
+
+    @JsonIgnore
     private String email;
+
+    @JsonIgnore
     private String role;
 
+    @JsonIgnore
     private Date joinDate;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="poster")

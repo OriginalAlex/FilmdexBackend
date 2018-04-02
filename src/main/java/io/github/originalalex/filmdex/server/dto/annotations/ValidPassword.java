@@ -1,4 +1,4 @@
-package io.github.originalalex.filmdex.server.annotations;
+package io.github.originalalex.filmdex.server.dto.annotations;
 
 import io.github.originalalex.filmdex.server.dto.validators.PasswordValidator;
 

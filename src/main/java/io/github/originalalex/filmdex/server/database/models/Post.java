@@ -1,5 +1,7 @@
 package io.github.originalalex.filmdex.server.database.models;
 
+import com.fasterxml.jackson.annotation.*;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -13,6 +15,7 @@ public class Post {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "poster_id")
+    @JsonIgnoreProperties("posts") // no need to show other posts and avoid infinite loop due to bi-directional relationship
     private User poster;
 
     private String thread;
@@ -21,6 +24,7 @@ public class Post {
     private Date timePosted;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="post")
+    @JsonManagedReference
     private List<Rating> ratings;
 
     public Long getId() {

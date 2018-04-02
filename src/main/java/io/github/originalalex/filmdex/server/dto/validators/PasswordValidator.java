@@ -1,7 +1,7 @@
 package io.github.originalalex.filmdex.server.dto.validators;
 
 
-import io.github.originalalex.filmdex.server.annotations.ValidPassword;
+import io.github.originalalex.filmdex.server.dto.annotations.ValidPassword;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

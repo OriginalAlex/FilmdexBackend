@@ -1,6 +1,6 @@
-package io.github.originalalex.filmdex.server.annotations;
+package io.github.originalalex.filmdex.server.dto.annotations;
 
-import io.github.originalalex.filmdex.server.dto.validators.EmailValidator;
+import io.github.originalalex.filmdex.server.dto.validators.UsernameValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -15,10 +15,12 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target({TYPE, FIELD, ANNOTATION_TYPE})
 @Retention(RUNTIME)
-@Constraint(validatedBy = EmailValidator.class)
+@Constraint(validatedBy = UsernameValidator.class)
 @Documented
-public @interface ValidEmail {
-    String message() default "Invalid email";
+public @interface ValidUsername {
+
+    String message() default "Invalid username";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
+
 }
