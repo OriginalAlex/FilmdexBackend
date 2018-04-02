@@ -4,22 +4,24 @@ import io.github.originalalex.filmdex.server.database.models.Post;
 import io.github.originalalex.filmdex.server.database.models.User;
 import io.github.originalalex.filmdex.server.database.services.PostService;
 import io.github.originalalex.filmdex.server.database.services.UserService;
-import io.github.originalalex.filmdex.exceptions.EmailsExistsException;
+import io.github.originalalex.filmdex.exceptions.AlreadyExistsException;
 import io.github.originalalex.filmdex.server.dto.PostDto;
 import io.github.originalalex.filmdex.server.dto.SignIn;
 import io.github.originalalex.filmdex.server.dto.UserDto;
 import io.github.originalalex.filmdex.utils.api.TokenUtils;
 import io.github.originalalex.filmdex.utils.io.HashUtils;
-import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -35,10 +37,23 @@ public class AccountsAPI {
     private PostService postService;
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public @ResponseBody String create(@RequestBody @Valid UserDto user) {
+    public @ResponseBody String create(@RequestBody @Valid UserDto user, BindingResult bindingResult, HttpServletResponse response) {
+        if (bindingResult.hasErrors()) {
+            List<ObjectError> errors = bindingResult.getAllErrors();
+            StringBuilder builder = new StringBuilder();
+            for (ObjectError error : errors) {
+                builder.append(error.getDefaultMessage() + ";");
+            }
+            try {
+                response.sendError(400, builder.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+                return "err";
+            }
+        }
         try {
             userService.registerNewUser(user);
-        } catch(EmailsExistsException e) {
+        } catch(AlreadyExistsException e) {
             return "Email already exists";
         }
         return "Registered user!";
@@ -62,7 +77,7 @@ public class AccountsAPI {
 
     @RequestMapping(value = "/signOut", method = RequestMethod.POST)
     public @ResponseBody String signOut(HttpServletResponse response) {
-        Cookie cookie = new Cookie("Token", null);
+        Cookie cookie = new Cookie("token", null);
         cookie.setHttpOnly(true);
         cookie.setMaxAge(0);
         response.addCookie(cookie);

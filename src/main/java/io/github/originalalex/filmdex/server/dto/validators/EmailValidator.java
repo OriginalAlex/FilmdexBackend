@@ -22,10 +22,16 @@ public class EmailValidator implements ConstraintValidator<ValidEmail, String> {
 
     @Override
     public boolean isValid(String email, ConstraintValidatorContext context) {
+        context.disableDefaultConstraintViolation();
+        if (email == null || email.trim().isEmpty()) {
+            context.buildConstraintViolationWithTemplate("Empty email field").addConstraintViolation();
+            return false;
+        }
         if (!pattern.matcher(email).matches()) {
             context.buildConstraintViolationWithTemplate("Invalid email").addConstraintViolation();
             return false;
         }
+        System.out.println("Valid");
         return true;
     }
 

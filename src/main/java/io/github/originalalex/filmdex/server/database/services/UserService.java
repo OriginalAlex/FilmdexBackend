@@ -2,7 +2,7 @@ package io.github.originalalex.filmdex.server.database.services;
 
 import io.github.originalalex.filmdex.server.database.models.User;
 import io.github.originalalex.filmdex.server.database.repositories.UserRepository;
-import io.github.originalalex.filmdex.exceptions.EmailsExistsException;
+import io.github.originalalex.filmdex.exceptions.AlreadyExistsException;
 import io.github.originalalex.filmdex.server.dto.UserDto;
 import io.github.originalalex.filmdex.utils.io.HashUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,10 +37,11 @@ public class UserService {
         }
     }
 
-    private boolean emailExists(String email) {
+    private boolean emailOrUserExists(String username, String email) {
         Iterator<User> users = userRepository.findAll().iterator();
         while (users.hasNext()) {
-            if (users.next().getEmail().equals(email)) {
+            User next = users.next();
+            if (next.getEmail().equals(email) || next.getUsername().equals(username)) {
                 return true;
             }
         }
@@ -48,10 +49,10 @@ public class UserService {
     }
 
     @Transactional
-    public User registerNewUser(UserDto details) throws EmailsExistsException{
+    public User registerNewUser(UserDto details) throws AlreadyExistsException {
         String email = details.getEmail();
-        if (emailExists(email)) {
-            throw new EmailsExistsException("An account with that email already exists");
+        if (emailOrUserExists(details.getUsername(), email)) {
+            throw new AlreadyExistsException("An account with that email already exists");
         }
         String passwordHash = HashUtils.SHA256(details.getPassword());
         User user = new User();
