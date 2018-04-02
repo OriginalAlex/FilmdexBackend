@@ -1,8 +1,9 @@
 package io.github.originalalex.filmdex.server.database.services;
 
+import io.github.originalalex.filmdex.exceptions.UserAlreadyExistsException;
 import io.github.originalalex.filmdex.server.database.models.User;
 import io.github.originalalex.filmdex.server.database.repositories.UserRepository;
-import io.github.originalalex.filmdex.exceptions.AlreadyExistsException;
+import io.github.originalalex.filmdex.exceptions.EmailAlreadyExistsException;
 import io.github.originalalex.filmdex.server.dto.UserDto;
 import io.github.originalalex.filmdex.utils.io.HashUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,23 +38,23 @@ public class UserService {
         }
     }
 
-    private boolean emailOrUserExists(String username, String email) {
+    private void checkForCollisionAndThrowErrors(String username, String email) throws EmailAlreadyExistsException, UserAlreadyExistsException {
         Iterator<User> users = userRepository.findAll().iterator();
         while (users.hasNext()) {
             User next = users.next();
-            if (next.getEmail().equals(email) || next.getUsername().equals(username)) {
-                return true;
+            if (next.getEmail().equals(email)) {
+                throw new EmailAlreadyExistsException("An account with that email already exists");
+            }
+            if (next.getUsername().equals(username)) {
+                throw new UserAlreadyExistsException("An account with that username already exists");
             }
         }
-        return false;
     }
 
     @Transactional
-    public User registerNewUser(UserDto details) throws AlreadyExistsException {
+    public User registerNewUser(UserDto details) throws EmailAlreadyExistsException, UserAlreadyExistsException {
         String email = details.getEmail();
-        if (emailOrUserExists(details.getUsername(), email)) {
-            throw new AlreadyExistsException("An account with that email already exists");
-        }
+        checkForCollisionAndThrowErrors(details.getUsername(), email);
         String passwordHash = HashUtils.SHA256(details.getPassword());
         User user = new User();
         user.setUsername(details.getUsername());

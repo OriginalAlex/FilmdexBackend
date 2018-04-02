@@ -31,7 +31,6 @@ public class EmailValidator implements ConstraintValidator<ValidEmail, String> {
             context.buildConstraintViolationWithTemplate("Invalid email").addConstraintViolation();
             return false;
         }
-        System.out.println("Valid");
         return true;
     }
 

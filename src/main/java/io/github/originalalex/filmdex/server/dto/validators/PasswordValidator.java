@@ -23,7 +23,11 @@ public class PasswordValidator implements ConstraintValidator<ValidPassword, Str
     @Override
     public boolean isValid(String password, ConstraintValidatorContext context) {
         context.disableDefaultConstraintViolation();
-        if(password.length() < 5 || password.length() > 100) {
+        if (password == null || password.isEmpty()) {
+            context.buildConstraintViolationWithTemplate("Password field must not be empty").addConstraintViolation();
+            return false;
+        }
+        if(password.length() < 4 || password.length() > 100) {
             context.buildConstraintViolationWithTemplate("Password length must be between 4 and 100").addConstraintViolation();
             return false;
         }

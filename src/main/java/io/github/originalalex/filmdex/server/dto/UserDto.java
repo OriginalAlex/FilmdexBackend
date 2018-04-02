@@ -10,17 +10,14 @@ import javax.validation.constraints.NotNull;
 public class UserDto {
 
     @NotNull
-    @NotEmpty
     @ValidUsername
     private String username;
 
     @NotNull
-    @NotEmpty
     @ValidPassword
     private String password;
 
     @NotNull
-    @NotEmpty
     @ValidEmail
     private String email;
 

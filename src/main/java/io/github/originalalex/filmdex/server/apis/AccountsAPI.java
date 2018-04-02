@@ -1,11 +1,13 @@
 package io.github.originalalex.filmdex.server.apis;
 
+import io.github.originalalex.filmdex.exceptions.UserAlreadyExistsException;
 import io.github.originalalex.filmdex.server.database.models.Post;
 import io.github.originalalex.filmdex.server.database.models.User;
 import io.github.originalalex.filmdex.server.database.services.PostService;
 import io.github.originalalex.filmdex.server.database.services.UserService;
-import io.github.originalalex.filmdex.exceptions.AlreadyExistsException;
+import io.github.originalalex.filmdex.exceptions.EmailAlreadyExistsException;
 import io.github.originalalex.filmdex.server.dto.PostDto;
+import io.github.originalalex.filmdex.server.dto.RequestResult;
 import io.github.originalalex.filmdex.server.dto.SignIn;
 import io.github.originalalex.filmdex.server.dto.UserDto;
 import io.github.originalalex.filmdex.utils.api.TokenUtils;
@@ -21,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -37,26 +38,29 @@ public class AccountsAPI {
     private PostService postService;
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public @ResponseBody String create(@RequestBody @Valid UserDto user, BindingResult bindingResult, HttpServletResponse response) {
+    public @ResponseBody RequestResult create(@RequestBody @Valid UserDto user, BindingResult bindingResult, HttpServletResponse response) {
+        RequestResult result = new RequestResult();
         if (bindingResult.hasErrors()) {
             List<ObjectError> errors = bindingResult.getAllErrors();
-            StringBuilder builder = new StringBuilder();
             for (ObjectError error : errors) {
-                builder.append(error.getDefaultMessage() + ";");
+                result.addResult(error.getDefaultMessage());
             }
-            try {
-                response.sendError(400, builder.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-                return "err";
-            }
+            response.setStatus(400);
+            return result;
         }
         try {
             userService.registerNewUser(user);
-        } catch(AlreadyExistsException e) {
-            return "Email already exists";
+        } catch(EmailAlreadyExistsException e) {
+            result.addResult("That email is already in use");
+            response.setStatus(409); // conflict status
+            return result;
+        } catch(UserAlreadyExistsException e) {
+            result.addResult("That username is already taken");
+            response.setStatus(409);
+            return result;
         }
-        return "Registered user!";
+        result.addResult("Registered user");
+        return result;
     }
 
     @RequestMapping(value = "/signIn", method = RequestMethod.POST)

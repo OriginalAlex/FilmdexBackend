@@ -14,6 +14,11 @@ public class UsernameValidator implements ConstraintValidator<ValidUsername, Str
 
     @Override
     public boolean isValid(String username, ConstraintValidatorContext context) {
+        context.disableDefaultConstraintViolation();
+        if (username == null || username.isEmpty()) {
+            context.buildConstraintViolationWithTemplate("Username field must not be empty").addConstraintViolation();
+            return false;
+        }
         if (!username.matches("^[a-zA-Z0-9_]*$")) {
             context.buildConstraintViolationWithTemplate("Usernames must be alphanumeric").addConstraintViolation();
             return false;
