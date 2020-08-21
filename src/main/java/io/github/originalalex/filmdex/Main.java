@@ -15,7 +15,7 @@ import java.util.Properties;
 public class Main {
 
     private static void initializeDefaults() {
-        Properties props = PropertiesUtils.getProperties("/config.properties");
+        Properties props = PropertiesUtils.getProperties("/defaultConfig.properties");
         API_INFORMATION.setKey(props.getProperty("API_KEY"));
     }
 
