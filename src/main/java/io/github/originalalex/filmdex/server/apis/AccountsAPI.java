@@ -28,7 +28,12 @@ import java.util.concurrent.TimeUnit;
 
 @Controller
 @RequestMapping("/users")
-@CrossOrigin(origins = "*")
+@CrossOrigin(
+        allowCredentials = "true",
+        origins = "*",
+        allowedHeaders = "*",
+        methods = {RequestMethod.GET,RequestMethod.POST,RequestMethod.DELETE,RequestMethod.PUT}
+)
 public class AccountsAPI {
 
     @Autowired
@@ -38,8 +43,10 @@ public class AccountsAPI {
     private PostService postService;
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
+    @CrossOrigin
     public @ResponseBody RequestResult create(@RequestBody @Valid UserDto user, BindingResult bindingResult, HttpServletResponse response) {
         RequestResult result = new RequestResult();
+        System.out.println(user.getEmail() + " and " + user.getPassword() + " and " + user.getUsername());
         if (bindingResult.hasErrors()) {
             List<ObjectError> errors = bindingResult.getAllErrors();
             for (ObjectError error : errors) {
@@ -90,6 +97,7 @@ public class AccountsAPI {
 
     @RequestMapping(value = "/submitPost", method = RequestMethod.POST)
     public @ResponseBody String post(@RequestBody @Valid PostDto postDto) {
+        System.out.println("received!");
         if (postDto.getPosterId() == null) return "no poster id present";
         User poster = userService.fetchById(postDto.getPosterId());
         if (poster == null) return "invalid poster id";
