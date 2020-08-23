@@ -13,7 +13,7 @@ public class SearchSpecificShow {
     private static final String BASE_URL = API_INFORMATION.getBaseURL() + "/tv/";
 
     public static String getSpecificShow(String query) {
-        return APIUtils.fetchDataAndAddToCache(cache, (BASE_URL + query), query, "credits");
+        return APIUtils.fetchDataAndAddToCache(cache, (BASE_URL + query), query, "credits", "videos", "reviews");
     }
 
 }
