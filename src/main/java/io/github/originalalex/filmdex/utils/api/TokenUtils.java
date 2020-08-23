@@ -49,7 +49,7 @@ public class TokenUtils {
         try {
             return verifier.verify(token);
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
         return null;
     }

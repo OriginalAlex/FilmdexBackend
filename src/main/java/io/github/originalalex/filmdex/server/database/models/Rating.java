@@ -18,4 +18,38 @@ public class Rating {
 
     private boolean isUpvote;
 
+    public Rating() {
+
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
+    }
+
+    public void setRaterId(long id) {
+        this.raterId = id;
+    }
+
+    public void setIsUpvote(boolean t){
+        this.isUpvote = isUpvote;
+    }
+
+    public Rating(Post post, long raterId, boolean isUpvote) {
+        this.post = post;
+        this.raterId = raterId;
+        this.isUpvote = isUpvote;
+    }
+
+    public Post getPost() {
+        return post;
+    }
+
+    public Long getRaterId() {
+        return raterId;
+    }
+
+    public boolean isUpvote() {
+        return this.isUpvote;
+    }
+
 }

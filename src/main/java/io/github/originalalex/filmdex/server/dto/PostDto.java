@@ -18,8 +18,6 @@ public class PostDto {
 
     private Long replyingTo; // the id of the post which they are replying to
 
-    @NotNull
-    private Long posterId; // the id of the person who posted the comment
 
     public String getBody() {
         return body;
@@ -43,14 +41,6 @@ public class PostDto {
 
     public void setReplyingTo(Long replyingTo) {
         this.replyingTo = replyingTo;
-    }
-
-    public Long getPosterId() {
-        return posterId;
-    }
-
-    public void setPosterId(Long posterId) {
-        this.posterId = posterId;
     }
 
 }

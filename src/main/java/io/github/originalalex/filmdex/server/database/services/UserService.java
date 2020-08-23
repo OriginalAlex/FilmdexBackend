@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -58,6 +59,7 @@ public class UserService {
         String passwordHash = HashUtils.SHA256(details.getPassword());
         User user = new User();
         user.setUsername(details.getUsername());
+        user.setJoinDate(new Date(System.currentTimeMillis()));
         user.setPasswordHash(passwordHash);
         user.setEmail(details.getEmail());
         return userRepository.save(user);

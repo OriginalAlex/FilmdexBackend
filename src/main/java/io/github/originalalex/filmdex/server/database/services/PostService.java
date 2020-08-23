@@ -30,7 +30,6 @@ public class PostService {
     }
 
     public Post fetchById(long id) {
-
         return postRepository.findById(id).get();
     }
 

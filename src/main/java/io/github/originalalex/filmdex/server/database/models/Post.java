@@ -23,9 +23,13 @@ public class Post {
     private String body;
     private Date timePosted;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="post")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="post", orphanRemoval = true)
     @JsonManagedReference
     private List<Rating> ratings;
+
+    public List<Rating> getRatings() {
+        return ratings;
+    }
 
     public Long getId() {
         return id;
